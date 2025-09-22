@@ -1,35 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from './Context/AuthContext';
+import Navbar from "./Pages/Navbar";
+import Footer from "./Components/Footer";
+import Home from "./Components/Home";
+import Login from "./Components/Login";
+import Signup from './Components/Signup';
+import CreatePost from './Components/CreatePost';
+import PostDetail from './Components/PostDetail';
+import PrivateRoute from './Components/PrivateRoute';
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { user } = useAuth();
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="app">
+      <Navbar />
+      <main className="content">
+        <Routes>
+          {/* Redirect root to login if not authenticated */}
+          <Route path="/" element={user ? <Home /> : <Navigate to="/login" replace />} />
+          
+          {/* Public routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/post/:id" element={<PostDetail />} />
+          
+          {/* Home route - protected */}
+          <Route path="/home" element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          } />
+          
+          {/* Other protected routes */}
+          <Route path="/create-post" element={
+            <PrivateRoute>
+              <CreatePost />
+            </PrivateRoute>
+          } />
+          <Route path="/edit-post/:id" element={
+            <PrivateRoute>
+              <CreatePost isEditing={true} />
+            </PrivateRoute>
+          } />
+        </Routes>
+      </main>
+      <Footer />
+    </div>
+  );
 }
 
-export default App
+export default App;
