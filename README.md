@@ -16,7 +16,9 @@ To give an overview of this project, I decided to build my forum app about sport
 
 Time spent: **8 hours and 42 minutes** spent in total
 
-* To recover the project, it took me **3 hours** in total
+To recover the project, it took me **3 hours** in total
+
+Time spent in total (1st build + 2nd build): **11 hours and 42 minutes**
 
 ## Required Features
 
